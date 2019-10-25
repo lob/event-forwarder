@@ -4,6 +4,8 @@ LDFLAGS  ?= "-s -w"
 
 COVERAGE_PROFILE ?= coverage.out
 
+AWS_PROFILE ?= sandbox
+
 GOTOOLS := \
 golang.org/x/tools/cmd/cover \
 
@@ -47,5 +49,10 @@ setup:
 
 .PHONY: test
 test:
+	@echo "---> Testing"
+	AWS_PROFILE=$(AWS_PROFILE) ENVIRONMENT=test go test ./pkg/... -race -coverprofile $(COVERAGE_PROFILE)
+
+.PHONY: test_ci
+test_ci:
 	@echo "---> Testing"
 	ENVIRONMENT=test go test ./pkg/... -race -coverprofile $(COVERAGE_PROFILE)

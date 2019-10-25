@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.13.3
+    resource_class: small
     working_directory: ~/event-forwarder
     steps:
       - checkout
@@ -22,11 +23,11 @@ jobs:
       - run:
           name: Run linter
           command: make lint
-      # - run:
-      #     name: Run tests
-      #     command: make test
-      # - run:
-      #     name: Enforce coverage
-      #     command: make enforce
-      # - store_artifacts:
-      #     path: coverage.out
+      - run:
+          name: Run tests
+          command: make test_ci
+      - run:
+          name: Enforce coverage
+          command: make enforce
+      - store_artifacts:
+          path: coverage.out
