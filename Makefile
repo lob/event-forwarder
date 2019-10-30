@@ -15,7 +15,7 @@ default: build
 .PHONY: build
 build:
 	@echo "---> Building"
-	go build -o ./bin/$(PKG_NAME) -ldflags $(LDFLAGS) ./cmd
+	GOOS=linux GOARCH=amd64 go build -o ./bin/$(PKG_NAME) -ldflags $(LDFLAGS) ./cmd/main.go
 
 .PHONY: clean
 clean:
@@ -43,10 +43,12 @@ lint:
 	$(BIN_DIR)/golangci-lint run
 
 .PHONY: setup
-setup:
+setup: $(BIN_DIR)/golangci-lint
 	@echo "--> Installing development tools"
-	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(BIN_DIR) v1.18.0
 	go get -u $(GOTOOLS)
+
+$(BIN_DIR)/golangci-lint:
+	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(BIN_DIR) v1.18.0
 
 .PHONY: test
 test:
