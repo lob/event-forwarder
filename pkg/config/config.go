@@ -14,10 +14,15 @@ import (
 type Config struct {
 	Environment string
 	SentryDSN   string
-	SentryTags  map[string]string
+	Tags        map[string]string
+	QueueURL    string
 }
 
-const environmentENV = "ENVIRONMENT"
+const (
+	environmentENV = "ENVIRONMENT"
+	typeENV        = "EVENT_TYPE"
+	queueENV       = "SQS_QUEUE_URL"
+)
 
 var (
 	parameterPath      = "/event-forwarder/"
@@ -26,7 +31,7 @@ var (
 
 // New returns a new instance of the config module corresponding to its specific
 // environment.
-func New(functionName string) (*Config, error) {
+func New() (*Config, error) {
 	// Authenticate with AWS
 	sess, err := session.NewSession()
 	if err != nil {
@@ -34,11 +39,19 @@ func New(functionName string) (*Config, error) {
 	}
 
 	svc := ssm.New(sess)
+
 	env := os.Getenv(environmentENV)
+
+	tags := map[string]string{"environment": env}
+
+	if t := os.Getenv(typeENV); t != "" {
+		tags["type"] = t
+	}
 
 	cfg := &Config{
 		Environment: env,
-		SentryTags:  map[string]string{"function": functionName, "environment": env},
+		QueueURL:    os.Getenv(queueENV),
+		Tags:        tags,
 	}
 
 	err = fetchParametersByPath(svc, cfg)

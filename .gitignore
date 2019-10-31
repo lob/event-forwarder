@@ -1,6 +1,5 @@
-
-# Created by https://www.gitignore.io/api/go,vim,macos,code
-# Edit at https://www.gitignore.io/?templates=go,vim,macos,code
+# Created by https://www.gitignore.io/api/go,vim,macos,code,serverless
+# Edit at https://www.gitignore.io/?templates=go,vim,macos,code,serverless
 
 ### Code ###
 .vscode/*
@@ -58,6 +57,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+### Serverless ###
+# Ignore build directory
+.serverless
+
 ### Vim ###
 # Swap
 [._]*.s[a-v][a-z]
@@ -78,6 +81,6 @@ tags
 # Persistent undo
 [._]*.un~
 
-# End of https://www.gitignore.io/api/go,vim,macos,code
+# End of https://www.gitignore.io/api/go,vim,macos,code,serverless
 
 bin
